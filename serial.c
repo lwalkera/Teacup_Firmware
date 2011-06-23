@@ -79,6 +79,18 @@ volatile uint8_t txbuf[BUFSIZE];
 volatile uint8_t flowflags = FLOWFLAG_SEND_XON;
 #endif
 
+void set_baud(uint16_t baud)
+{
+#ifdef UBRR0
+	UBRR0 = baud;
+#elif defined(UBRR0L)
+	UBRR0L = baud & 0xff;
+	UBRR0H = (baud>>8) & 0xff;
+#else
+#warning There are no serial ports defined for this chip!
+#endif
+}
+
 /// initialise serial subsystem
 ///
 /// set up baud generator and interrupts, clear buffers
@@ -87,20 +99,20 @@ void serial_init()
 	#ifdef	EECONFIG
 	if (eeconfig.baud > 38401) {
 		UCSR0A = MASK(U2X0);
-		UBRR0 = ((F_CPU / 8) / eeconfig.baud) - 1;
+		set_baud(((F_CPU / 8) / eeconfig.baud) - 1);
 	}
 	else {
 		UCSR0A = 0;
-		UBRR0 = ((F_CPU / 16) / eeconfig.baud) - 1;
+		set_baud(((F_CPU / 16) / eeconfig.baud) - 1);
 	}
 	#else
 	if (BAUD > 38401) {
 		UCSR0A = MASK(U2X0);
-		UBRR0 = ((F_CPU / 8) / BAUD) - 1;
+		set_baud(((F_CPU / 8) / BAUD) - 1);
 	}
 	else {
 		UCSR0A = 0;
-		UBRR0 = ((F_CPU / 16) / BAUD) - 1;
+		set_baud(((F_CPU / 16) / BAUD) - 1);
 	}
 	#endif
 
