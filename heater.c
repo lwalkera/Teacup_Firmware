@@ -99,18 +99,22 @@ void heater_init() {
 			*heaters[i].heater_pwm = 0;
 			// this is somewhat ugly too, but switch() won't accept pointers for reasons unknown
 			switch((uint16_t) heaters[i].heater_pwm) {
+				#ifdef TCCR0A
 				case (uint16_t) &OCR0A:
 					TCCR0A |= MASK(COM0A1);
 					break;
 				case (uint16_t) &OCR0B:
 					TCCR0A |= MASK(COM0B1);
 					break;
+				#endif
+				#ifdef TCCR2A
 				case (uint16_t) &OCR2A:
 					TCCR2A |= MASK(COM2A1);
 					break;
 				case (uint16_t) &OCR2B:
 					TCCR2A |= MASK(COM2B1);
 					break;
+				#endif
 				#ifdef TCCR3A
 				case (uint16_t) &OCR3AL:
 					TCCR3A |= MASK(COM3A1);
@@ -323,7 +327,7 @@ void heater_set(heater_t index, uint8_t value) {
 
 	if (heaters[index].heater_pwm) {
 		*(heaters[index].heater_pwm) = value;
-		#ifdef	DEBUG
+		#if defined(DEBUG) && defined(OCR0A)
 		if (DEBUG_PID && (debug_flags & DEBUG_PID))
 			sersendf_P(PSTR("PWM{%u = %u}\n"), index, OCR0A);
 		#endif

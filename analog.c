@@ -37,7 +37,9 @@ void analog_init() {
 		adc_counter = 0;
 
 		AIO0_DDR &= ~analog_mask;
+#ifdef DIDR0
 		DIDR0 = analog_mask & 0x3F;
+#endif
 		// now we start the first conversion and leave the rest to the interrupt
 		ADCSRA |= MASK(ADIE) | MASK(ADSC);
 	} /* analog_mask > 0 */

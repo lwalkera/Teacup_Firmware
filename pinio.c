@@ -1,5 +1,24 @@
 #include	"pinio.h"
 
+/*
+Power
+*/
+
+void power_on()
+{
+#ifdef STEPPER_ENABLE_PIN
+	WRITE(STEPPER_ENABLE_PIN, STEPPER_ENABLE_INVERT);
+	SET_OUTPUT(STEPPER_ENABLE_PIN);
+#endif
+#ifdef STEPPER_SLEEP_PIN
+	WRITE(STEPPER_SLEEP_PIN, STEPPER_SLEEP_INVERT);
+	SET_OUTPUT(STEPPER_SLEEP_PIN);
+#endif
+#ifdef PS_ON_PIN
+	WRITE(PS_ON_PIN, 0); SET_OUTPUT(PS_ON_PIN);
+#endif
+}
+
 void power_off() {
 
 	x_disable();
@@ -8,6 +27,9 @@ void power_off() {
 
 	#ifdef	STEPPER_ENABLE_PIN
 	WRITE(STEPPER_ENABLE_PIN, STEPPER_ENABLE_INVERT ^ 1);
+	#endif
+	#ifdef STEPPER_SLEEP_PIN
+	WRITE(STEPPER_SLEEP_PIN, STEPPER_SLEEP_INVERT ^ 1);
 	#endif
 	#ifdef	PS_ON_PIN
 		SET_INPUT(PS_ON_PIN);

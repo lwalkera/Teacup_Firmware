@@ -79,7 +79,7 @@ void clock_10ms() {
 }
 
 void clock_poll() {
-	ifclock(CLOCK_FLAG_10MS) {
+	ifclock(clock_flag_10ms) {
 		clock_10ms();
 	}
 }

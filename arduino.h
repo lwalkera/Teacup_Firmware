@@ -75,6 +75,10 @@
 	#include	"arduino_644.h"
 #endif	/*	_AVR_ATmega{644,644P,644PA}__ */
 
+#if defined (__AVR_ATmega128__)
+	#include	"arduino_128.h"
+#endif
+
 #if defined (__AVR_ATmega1280__)
 	#include	"arduino_1280.h"
 #endif	/* __AVR_ATmega1280__ */

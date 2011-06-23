@@ -32,7 +32,9 @@ struct {
 	uint8_t enable_pin;
 	uint8_t active_low;
 } extruders[] = {
+#ifdef E_ENABLE_PIN
 	DEFINE_EXTRUDER(E_ENABLE_PIN, 1)
+#endif
 	#include	"config.h"
 };
 
